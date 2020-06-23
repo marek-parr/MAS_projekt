@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MAS_projekt.Models
+namespace MAS_projekt.Models.People
 {
     public class Address
     {
+        public int Id { get; set; }
         public string Street { get; set; }
         public string HouseNumber { get; set; }
         public string ApartmentNumber { get; set; }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MAS_projekt.Models
+namespace MAS_projekt.Models.People
 {
     public class Employee
     {

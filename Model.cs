@@ -1,6 +1,8 @@
 namespace MAS_projekt
 {
-    using MAS_projekt.Models;
+    using MAS_projekt.Models.Orders;
+    using MAS_projekt.Models.People;
+    using MAS_projekt.Models.Products;
     using System;
     using System.Data.Entity;
     using System.Linq;
@@ -19,6 +21,14 @@ namespace MAS_projekt
         }
         public virtual DbSet<Employee> Employees { get; set; }
         public virtual DbSet<Person> People { get; set; }
+        public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<Client> Clients { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<Report> Reports { get; set; }
+        public virtual DbSet<Item> Items { get; set; }
+        public virtual DbSet<ShoppingCart> ShoppingCarts { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
     }
 
     //public class MyEntity

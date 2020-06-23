@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace MAS_projekt.Models.Products
 {
-    class Category
+    public class Category
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public virtual Category Supercategory { get; set; }
+        public virtual ICollection<Category> Subcategories { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

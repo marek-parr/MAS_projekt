@@ -82,9 +82,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model.cs" />
-    <Compile Include="Models\Address.cs" />
-    <Compile Include="Models\Employee.cs" />
-    <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\Orders\Item.cs" />
+    <Compile Include="Models\Orders\Order.cs" />
+    <Compile Include="Models\Orders\Report.cs" />
+    <Compile Include="Models\Orders\ShoppingCart.cs" />
+    <Compile Include="Models\People\Address.cs" />
+    <Compile Include="Models\People\Client.cs" />
+    <Compile Include="Models\People\Employee.cs" />
+    <Compile Include="Models\People\Person.cs" />
+    <Compile Include="Models\Products\Category.cs" />
+    <Compile Include="Models\Products\Dekstop.cs" />
+    <Compile Include="Models\Products\Laptop.cs" />
+    <Compile Include="Models\Products\Monitor.cs" />
+    <Compile Include="Models\Products\Part.cs" />
+    <Compile Include="Models\Products\Computer.cs" />
+    <Compile Include="Models\Products\Product.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
