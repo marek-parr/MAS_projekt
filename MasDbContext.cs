@@ -123,25 +123,39 @@ namespace MAS_projekt
             var item1 = new Item()
             {
                 Id = 1,
-                Product = product2,
+                ProductId = 2,
                 Amount = 3,
                 OrderId = 1
             };
             var item2 = new Item()
             {
                 Id = 2,
-                Product = product1,
+                ProductId = 1,
                 Amount = 1,
                 OrderId = 1
             };
             var item3 = new Item()
             {
                 Id = 3,
-                Product = product1,
+                ProductId = 1,
                 Amount = 3,
                 OrderId = 2
             };
-            modelBuilder.Entity<Item>().HasData(item1, item2, item3);
+            var item4 = new Item()
+            {
+                Id = 4,
+                ProductId = 1,
+                Amount = 2,
+                OrderId = 3
+            };
+            var item5 = new Item()
+            {
+                Id = 5,
+                ProductId = 2,
+                Amount = 1,
+                OrderId = 3
+            };
+            modelBuilder.Entity<Item>().HasData(item1, item2, item3, item4, item5);
 
             var order1 = new 
             {
@@ -168,11 +182,11 @@ namespace MAS_projekt
                 ClientId = 2L,
                 Created = DateTime.Now.AddDays(-17),
                 OrderNumber = 78525345L,
-                State = OrderState.DONE
+                State = OrderState.IN_PROGRESS
             };
 
 
-            modelBuilder.Entity<Order>().HasData(order1, order2);
+            modelBuilder.Entity<Order>().HasData(order1, order2, order3);
         }
 
         public virtual DbSet<Employee> Employees { get; set; }

@@ -171,6 +171,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="OrderDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="OrderListWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -180,11 +184,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DAL\DbService.cs" />
-    <Compile Include="Migrations\20200624234908_Migration1.0.cs" />
-    <Compile Include="Migrations\20200624234908_Migration1.0.designer.cs">
-      <DependentUpon>20200624234908_Migration1.0.cs</DependentUpon>
+    <Compile Include="Migrations\20200625033735_Migration1.0.cs" />
+    <Compile Include="Migrations\20200625033735_Migration1.0.designer.cs">
+      <DependentUpon>20200625033735_Migration1.0.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\MasDbContextModelSnapshot.cs" />
+    <Compile Include="OrderDetailsWindow.xaml.cs">
+      <DependentUpon>OrderDetailsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OrderListWindow.xaml.cs">
       <DependentUpon>OrderListWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace MAS_projekt.Models.Products
 {
-    [NotMapped]
     public abstract class Product
     {
         public int Id { get; set; }

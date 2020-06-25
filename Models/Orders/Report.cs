@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,10 +14,10 @@ namespace MAS_projekt.Models.Orders
         public virtual ICollection<Order> Orders { get; set; }
         [Required]
         public DateTime Month { get; set; }
-
-        public double GetSumOfCosts()
+        [NotMapped]
+        public double SumOfCosts
         {
-            return Orders.Aggregate(0.0, (acc, order) => acc + order.GetCost());
+            get { return Orders.Aggregate(0.0, (acc, order) => acc + order.Cost); }
         }
     }
 }

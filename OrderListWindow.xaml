@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MAS_projekt"
         mc:Ignorable="d"
-        Title="Lista zamówień" Height="700" Width="800">
+        Title="Lista zamówień" Height="700" Width="800"
+        WindowStartupLocation="CenterScreen">
     <Grid Margin="20 20 0 0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="2*" />
             <RowDefinition Height="2*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -37,10 +38,6 @@
         </TextBlock>
         <ComboBox Name="ClientComboBox" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" Grid.Row="1" VerticalAlignment="Bottom" Margin="-10 0 20 0" IsEditable="True" Text="Wybierz klienta..." SelectionChanged="ClientComboBox_SelectionChanged"/>
         <DataGrid Name="OrderDataGrid" Grid.Row="2" Grid.RowSpan="2" Grid.ColumnSpan="4" Margin="0 0 20 0" IsReadOnly="True" AutoGenerateColumns="False" >
-            <DataGrid.Resources>
-                <Style TargetType="DataGridRow">
-                </Style>
-            </DataGrid.Resources>
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Zamówienie nr" Width="*" Binding="{Binding OrderNumber}" />
@@ -48,7 +45,7 @@
                 <DataGridTextColumn Header="Klient" Width="2*" Binding="{Binding Client.ClientNumberAndFullName}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Column="3" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Height="50">Dalej</Button>
+        <Button x:Name="NextButton" Grid.Column="3" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Height="50" Click="NextButton_Click" Margin="0 30 0 0 " >Dalej</Button>
         
     </Grid>
 </Window>

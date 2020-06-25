@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
+using MAS_projekt.Models.Products;
 
 namespace MAS_projekt.DAL
 {
@@ -18,9 +20,9 @@ namespace MAS_projekt.DAL
             _context.SaveChanges();
         }
 
-        public ICollection<Client> GetClients()
+        public ObservableCollection<Client> GetClients()
         {
-            return _context.Clients.Include(x => x.Person).ToList();
+            return new ObservableCollection<Client>(_context.Clients.Include(x => x.Person).ToList());
         }
 
         public Client GetClientById(int id)
@@ -28,27 +30,49 @@ namespace MAS_projekt.DAL
             return _context.Clients.Include(x => x.Person).FirstOrDefault(x => x.Id == id);
         }
 
-        public ICollection<Client> GetClientsFiltered(string filter)
+        public ObservableCollection<Client> GetClientsFiltered(string filter)
         {
-            return _context.Clients
+            return new ObservableCollection<Client>(_context.Clients
                 .Where(client => client.ClientNumberAndFullName.ToUpper().Contains(filter.ToUpper()))
-                .Include(x => x.Person)
-                .ToList();
+                .Include(o => o.Person)
+                .ToList());
         }
 
-        public ICollection<Order> GetOrders()
+        public ObservableCollection<Order> GetOrdersInProgressOrCreated()
         {
-            return _context.Orders.Include(x => x.Client).ThenInclude(c => c.Person).ToList();
+            return new ObservableCollection<Order>(_context.Orders
+                .Where(order => order.State.Equals(OrderState.CREATED) || order.State.Equals(OrderState.IN_PROGRESS))
+                .Include(order => order.Client)
+                    .ThenInclude(c => c.Person)
+                .Include(order => order.Items)
+                    .ThenInclude(item => item.Product)
+                .ToList());
         }
 
-        public ICollection<Order> GetOrdersOfClient(Client client)
+        public ObservableCollection<Order> GetOrdersOfClient(Client client)
         {
-            return client.Orders.ToList();
+            if (client == null)
+            {
+                return GetOrdersInProgressOrCreated();
+            }
+            return new ObservableCollection<Order>(_context.Orders
+                .Where(order => order.State.Equals(OrderState.CREATED) || order.State.Equals(OrderState.IN_PROGRESS))
+                .Where(order => order.Client.Equals(client))
+                .Include(o => o.Client)
+                    .ThenInclude(c => c.Person)
+                .Include(o => o.Items)
+                    .ThenInclude(i => i.Product)
+                .ToList());
         }
 
         public Order GetOrderById(int id)
         {
-            return _context.Orders.Include(x => x.Client).FirstOrDefault(o => o.Id == id);
+            return _context.Orders
+                .Include(o => o.Client)
+                    .ThenInclude(c => c.Person)
+                .Include(o => o.Items)
+                    .ThenInclude(i => i.Product)
+                .FirstOrDefault(o => o.Id == id);
         }
 
         public void ChangeOrderState(Order order, OrderState newState)
@@ -57,8 +81,9 @@ namespace MAS_projekt.DAL
             UpdateDbContext();
         }
 
-        public void RejectOrder(Order order)
+        public void RejectOrder(int orderId)
         {
+            var order = GetOrderById(orderId);
             if (!order.State.Equals(OrderState.IN_PROGRESS))
             {
                 throw new WrongOrderStateException(order, OrderState.IN_PROGRESS);
@@ -66,8 +91,9 @@ namespace MAS_projekt.DAL
             ChangeOrderState(order, OrderState.REJECTED);
         }
 
-        public void CancelOrder(Order order)
+        public void CancelOrder(int orderId)
         {
+            var order = GetOrderById(orderId);
             if (!order.State.Equals(OrderState.CREATED))
             {
                 throw new WrongOrderStateException(order, OrderState.CREATED);
@@ -75,8 +101,9 @@ namespace MAS_projekt.DAL
             ChangeOrderState(order, OrderState.CANCELED);
         }
 
-        public void ProceedToNextOrderState(Order order)
+        public void ProceedToNextOrderState(int orderId)
         {
+            var order = GetOrderById(orderId);
             switch (order.State)
             {
                 case OrderState.CREATED:
@@ -90,19 +117,22 @@ namespace MAS_projekt.DAL
             }
         }
 
-        public ICollection<Order> GetOrdersFilteredByNumber(string orderNumber)
+        public ObservableCollection<Order> GetOrdersFilteredByNumber(string orderNumber)
         {
-            return _context.Orders
+            return new ObservableCollection<Order>(_context.Orders
                 .Include(o => o.Client)
+                    .ThenInclude(c => c.Person)
+                .Include(o => o.Items)
+                    .ThenInclude(i => i.Product)
                 .Where(order => order.OrderNumber.ToString().Contains(orderNumber))
-                .ToList();
+                .ToList());
         }
 
-        public ICollection<Order> GetOrdersOfClientFilteredByNumber(Client client, string orderNumber)
+        public ObservableCollection<Order> GetOrdersOfClientFilteredByNumber(Client client, string orderNumber)
         {
-            return GetOrdersOfClient(client)
+            return new ObservableCollection<Order>(GetOrdersOfClient(client)
                 .Where(order => order.OrderNumber.ToString().Contains(orderNumber))
-                .ToList();
+                .ToList());
         }
     }
 }

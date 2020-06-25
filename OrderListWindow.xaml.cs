@@ -3,6 +3,7 @@ using MAS_projekt.Models.Orders;
 using MAS_projekt.Models.People;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,15 +25,15 @@ namespace MAS_projekt
     public partial class OrderListWindow : Window
     {
         private DbService _dbService;
-        private ICollection<Order> allOrders;
-        private ICollection<Order> filteredOrders;
-        private ICollection<Client> allClients;
+        private readonly ObservableCollection<Order> allOrders;
+        private ObservableCollection<Order> filteredOrders;
+        private readonly ObservableCollection<Client> allClients;
 
         public OrderListWindow()
         {
             InitializeComponent();
             _dbService = new DbService();
-            allOrders = _dbService.GetOrders();
+            allOrders = _dbService.GetOrdersInProgressOrCreated();
             allClients = _dbService.GetClients();
             filteredOrders = allOrders;
             OrderDataGrid.ItemsSource = filteredOrders;
@@ -42,7 +43,15 @@ namespace MAS_projekt
         private void FilterTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = (TextBox)sender;
-            filteredOrders = _dbService.GetOrdersFilteredByNumber(textBox.Text.Trim());
+            var text = textBox.Text.Trim();
+            if (ClientComboBox.SelectedItem == null)
+            {
+                filteredOrders = _dbService.GetOrdersFilteredByNumber(text);
+            } else
+            {
+                var client = (Client)ClientComboBox.SelectedItem;
+                filteredOrders = _dbService.GetOrdersOfClientFilteredByNumber(client, text);
+            }
             OrderDataGrid.ItemsSource = null;
             OrderDataGrid.ItemsSource = filteredOrders;
         }
@@ -51,7 +60,21 @@ namespace MAS_projekt
         {
             var comboBox = (ComboBox)sender;
             var selectedClient = (Client)comboBox.SelectedItem;
-            filteredOrders = _dbService.GetOrdersOfClient(selectedClient);
+            var text = FilterTextBox.Text.Trim();
+            filteredOrders = _dbService.GetOrdersOfClientFilteredByNumber(selectedClient, text);
+            OrderDataGrid.ItemsSource = null;
+            OrderDataGrid.ItemsSource = filteredOrders;
+        }
+
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (OrderDataGrid.SelectedItem == null)
+            {
+                return;
+            }
+            var selectedOrder = (Order)OrderDataGrid.SelectedItem;
+            new OrderDetailsWindow(selectedOrder).Show();
+            this.Close();
         }
     }
 }

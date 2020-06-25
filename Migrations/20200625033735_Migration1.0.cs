@@ -82,7 +82,7 @@ namespace MAS_projekt.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Desktop",
+                name: "Products",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -93,40 +93,30 @@ namespace MAS_projekt.Migrations
                     Description = table.Column<string>(nullable: false),
                     NumberOfItemsInStock = table.Column<int>(nullable: false),
                     CategoryId = table.Column<int>(nullable: false),
-                    Type = table.Column<string>(nullable: false)
+                    Discriminator = table.Column<string>(nullable: false),
+                    Type = table.Column<string>(nullable: true),
+                    MaximumBatteryLife = table.Column<int>(nullable: true),
+                    DisplaySize = table.Column<double>(nullable: true),
+                    DesktopId = table.Column<int>(nullable: true),
+                    LaptopId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Desktop", x => x.Id);
+                    table.PrimaryKey("PK_Products", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Desktop_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        name: "FK_Products_Products_DesktopId",
+                        column: x => x.DesktopId,
+                        principalTable: "Products",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Laptop",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false),
-                    Brand = table.Column<string>(nullable: false),
-                    Price = table.Column<double>(nullable: false),
-                    Description = table.Column<string>(nullable: false),
-                    NumberOfItemsInStock = table.Column<int>(nullable: false),
-                    CategoryId = table.Column<int>(nullable: false),
-                    Type = table.Column<string>(nullable: false),
-                    MaximumBatteryLife = table.Column<int>(nullable: false),
-                    DisplaySize = table.Column<double>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Laptop", x => x.Id);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Laptop_Categories_CategoryId",
+                        name: "FK_Products_Products_LaptopId",
+                        column: x => x.LaptopId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Products_Categories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "Categories",
                         principalColumn: "Id",
@@ -238,6 +228,7 @@ namespace MAS_projekt.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<int>(nullable: false),
+                    ProductId = table.Column<int>(nullable: false),
                     OrderId = table.Column<int>(nullable: false),
                     ShoppingCartId = table.Column<int>(nullable: true)
                 },
@@ -248,6 +239,12 @@ namespace MAS_projekt.Migrations
                         name: "FK_Items_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Items_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -264,6 +261,11 @@ namespace MAS_projekt.Migrations
                 values: new object[] { 1, null, "Warszawa", "1A", "00-001", "Marszałkowska" });
 
             migrationBuilder.InsertData(
+                table: "Addresses",
+                columns: new[] { "Id", "ApartmentNumber", "City", "HouseNumber", "PostalCode", "Street" },
+                values: new object[] { 2, null, "Warszawa", "44", "00-001", "Złota" });
+
+            migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name", "SupercategoryId" },
                 values: new object[] { 1, "Komputery", null });
@@ -271,57 +273,66 @@ namespace MAS_projekt.Migrations
             migrationBuilder.InsertData(
                 table: "Categories",
                 columns: new[] { "Id", "Name", "SupercategoryId" },
-                values: new object[] { 2, "Komputery stacjonarne", 1 });
-
-            migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "Id", "Name", "SupercategoryId" },
-                values: new object[] { 3, "Laptopy", 1 });
+                values: new object[,]
+                {
+                    { 2, "Komputery stacjonarne", 1 },
+                    { 3, "Laptopy", 1 }
+                });
 
             migrationBuilder.InsertData(
                 table: "People",
                 columns: new[] { "Id", "AddressId", "DateOfBirth", "Email", "FirstName", "LastName", "PhoneNumber" },
-                values: new object[] { 1, 1, new DateTime(2000, 6, 25, 1, 49, 7, 423, DateTimeKind.Local).AddTicks(5479), "test@test.com", "Jan", "Kowalski", "1234567890" });
+                values: new object[,]
+                {
+                    { 1, 1, new DateTime(2000, 6, 25, 5, 37, 34, 804, DateTimeKind.Local).AddTicks(7890), "test@test.com", "Jan", "Kowalski", "1234567890" },
+                    { 2, 2, new DateTime(2002, 6, 25, 5, 37, 34, 805, DateTimeKind.Local).AddTicks(7911), "anna@nowak.com", "Anna", "Nowak", "675849321" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Clients",
                 columns: new[] { "Id", "PersonId", "PreferredAddressId" },
-                values: new object[] { 1L, 1, null });
+                values: new object[,]
+                {
+                    { 1L, 1, null },
+                    { 2L, 2, null }
+                });
 
             migrationBuilder.InsertData(
-                table: "Desktop",
-                columns: new[] { "Id", "Brand", "CategoryId", "Description", "Name", "NumberOfItemsInStock", "Price", "Type" },
-                values: new object[] { 1, "DELL", 2, "Komputer stacjonarny DELL Inspiron", "Inspiron", 10, 1399.99, "Biznesowy" });
+                table: "Products",
+                columns: new[] { "Id", "Brand", "CategoryId", "Description", "Discriminator", "Name", "NumberOfItemsInStock", "Price", "Type" },
+                values: new object[] { 1, "DELL", 2, "Komputer stacjonarny DELL Inspiron", "Desktop", "Inspiron", 10, 1399.99, "Biznesowy" });
 
             migrationBuilder.InsertData(
-                table: "Laptop",
-                columns: new[] { "Id", "Brand", "CategoryId", "Description", "DisplaySize", "MaximumBatteryLife", "Name", "NumberOfItemsInStock", "Price", "Type" },
-                values: new object[] { 2, "Alienware", 3, "Laptoop Alienware Areea 51m", 17.0, 120, "AREA", 15, 7999.9899999999998, "Gamingowy" });
+                table: "Products",
+                columns: new[] { "Id", "Brand", "CategoryId", "Description", "Discriminator", "Name", "NumberOfItemsInStock", "Price", "DisplaySize", "MaximumBatteryLife", "Type" },
+                values: new object[] { 2, "Alienware", 3, "Laptoop Alienware Areea 51m", "Laptop", "AREA", 15, 7999.9899999999998, 17.0, 120, "Gamingowy" });
 
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CanceledOrRejected", "ClientId", "Created", "OrderNumber", "ReportId", "State" },
-                values: new object[] { 1, null, 1L, new DateTime(2020, 6, 15, 1, 49, 7, 430, DateTimeKind.Local).AddTicks(5480), 56789L, null, 1 });
+                values: new object[] { 1, null, 1L, new DateTime(2020, 6, 15, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013), 56789L, null, 1 });
 
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CanceledOrRejected", "ClientId", "Created", "OrderNumber", "ReportId", "State" },
-                values: new object[] { 2, null, 1L, new DateTime(2020, 6, 22, 1, 49, 7, 430, DateTimeKind.Local).AddTicks(5480), 1234567L, null, 0 });
+                values: new object[] { 2, null, 1L, new DateTime(2020, 6, 22, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013), 1234567L, null, 0 });
+
+            migrationBuilder.InsertData(
+                table: "Orders",
+                columns: new[] { "Id", "CanceledOrRejected", "ClientId", "Created", "OrderNumber", "ReportId", "State" },
+                values: new object[] { 3, null, 2L, new DateTime(2020, 6, 8, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013), 78525345L, null, 1 });
 
             migrationBuilder.InsertData(
                 table: "Items",
-                columns: new[] { "Id", "Amount", "OrderId", "ShoppingCartId" },
-                values: new object[] { 1, 3, 1, null });
-
-            migrationBuilder.InsertData(
-                table: "Items",
-                columns: new[] { "Id", "Amount", "OrderId", "ShoppingCartId" },
-                values: new object[] { 2, 1, 1, null });
-
-            migrationBuilder.InsertData(
-                table: "Items",
-                columns: new[] { "Id", "Amount", "OrderId", "ShoppingCartId" },
-                values: new object[] { 3, 3, 2, null });
+                columns: new[] { "Id", "Amount", "OrderId", "ProductId", "ShoppingCartId" },
+                values: new object[,]
+                {
+                    { 1, 3, 1, 2, null },
+                    { 2, 1, 1, 1, null },
+                    { 3, 3, 2, 1, null },
+                    { 4, 2, 3, 2, null },
+                    { 5, 1, 3, 2, null }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Categories_SupercategoryId",
@@ -340,11 +351,6 @@ namespace MAS_projekt.Migrations
                 column: "PreferredAddressId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Desktop_CategoryId",
-                table: "Desktop",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Employees_PersonId",
                 table: "Employees",
                 column: "PersonId",
@@ -356,14 +362,14 @@ namespace MAS_projekt.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Items_ProductId",
+                table: "Items",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Items_ShoppingCartId",
                 table: "Items",
                 column: "ShoppingCartId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Laptop_CategoryId",
-                table: "Laptop",
-                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_ClientId",
@@ -381,6 +387,21 @@ namespace MAS_projekt.Migrations
                 column: "AddressId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_DesktopId",
+                table: "Products",
+                column: "DesktopId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_LaptopId",
+                table: "Products",
+                column: "LaptopId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_CategoryId",
+                table: "Products",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ShoppingCarts_ClientId",
                 table: "ShoppingCarts",
                 column: "ClientId",
@@ -390,28 +411,25 @@ namespace MAS_projekt.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Desktop");
-
-            migrationBuilder.DropTable(
                 name: "Employees");
 
             migrationBuilder.DropTable(
                 name: "Items");
 
             migrationBuilder.DropTable(
-                name: "Laptop");
+                name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Orders");
+                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "ShoppingCarts");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Reports");
 
             migrationBuilder.DropTable(
-                name: "Reports");
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Clients");

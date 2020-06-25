@@ -23,7 +23,11 @@ namespace MAS_projekt.Models.People
         public string ClientNumberAndFullName
         {
             get { return $"{Id} - " + Person.GetFullName(); }
-            set { }
+        }
+        [NotMapped]
+        public string FullName
+        {
+            get { return Person.GetFullName(); }
         }
 
         public Client()

@@ -32,12 +32,17 @@ namespace MAS_projekt.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ShoppingCartId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("ShoppingCartId");
 
@@ -48,19 +53,36 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 1,
                             Amount = 3,
-                            OrderId = 1
+                            OrderId = 1,
+                            ProductId = 2
                         },
                         new
                         {
                             Id = 2,
                             Amount = 1,
-                            OrderId = 1
+                            OrderId = 1,
+                            ProductId = 1
                         },
                         new
                         {
                             Id = 3,
                             Amount = 3,
-                            OrderId = 2
+                            OrderId = 2,
+                            ProductId = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Amount = 2,
+                            OrderId = 3,
+                            ProductId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Amount = 1,
+                            OrderId = 3,
+                            ProductId = 2
                         });
                 });
 
@@ -102,7 +124,7 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 1,
                             ClientId = 1L,
-                            Created = new DateTime(2020, 6, 15, 1, 49, 7, 430, DateTimeKind.Local).AddTicks(5480),
+                            Created = new DateTime(2020, 6, 15, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013),
                             OrderNumber = 56789L,
                             State = 1
                         },
@@ -110,9 +132,17 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 2,
                             ClientId = 1L,
-                            Created = new DateTime(2020, 6, 22, 1, 49, 7, 430, DateTimeKind.Local).AddTicks(5480),
+                            Created = new DateTime(2020, 6, 22, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013),
                             OrderNumber = 1234567L,
                             State = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ClientId = 2L,
+                            Created = new DateTime(2020, 6, 8, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013),
+                            OrderNumber = 78525345L,
+                            State = 1
                         });
                 });
 
@@ -187,6 +217,14 @@ namespace MAS_projekt.Migrations
                             HouseNumber = "1A",
                             PostalCode = "00-001",
                             Street = "Marszałkowska"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            City = "Warszawa",
+                            HouseNumber = "44",
+                            PostalCode = "00-001",
+                            Street = "Złota"
                         });
                 });
 
@@ -217,6 +255,11 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 1L,
                             PersonId = 1
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            PersonId = 2
                         });
                 });
 
@@ -290,11 +333,21 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 1,
                             AddressId = 1,
-                            DateOfBirth = new DateTime(2000, 6, 25, 1, 49, 7, 423, DateTimeKind.Local).AddTicks(5479),
+                            DateOfBirth = new DateTime(2000, 6, 25, 5, 37, 34, 804, DateTimeKind.Local).AddTicks(7890),
                             Email = "test@test.com",
                             FirstName = "Jan",
                             LastName = "Kowalski",
                             PhoneNumber = "1234567890"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            AddressId = 2,
+                            DateOfBirth = new DateTime(2002, 6, 25, 5, 37, 34, 805, DateTimeKind.Local).AddTicks(7911),
+                            Email = "anna@nowak.com",
+                            FirstName = "Anna",
+                            LastName = "Nowak",
+                            PhoneNumber = "675849321"
                         });
                 });
 
@@ -338,7 +391,7 @@ namespace MAS_projekt.Migrations
                         });
                 });
 
-            modelBuilder.Entity("MAS_projekt.Models.Products.Desktop", b =>
+            modelBuilder.Entity("MAS_projekt.Models.Products.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -356,6 +409,10 @@ namespace MAS_projekt.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -366,15 +423,24 @@ namespace MAS_projekt.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Desktop");
+                    b.ToTable("Products");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Product");
+                });
+
+            modelBuilder.Entity("MAS_projekt.Models.Products.Desktop", b =>
+                {
+                    b.HasBaseType("MAS_projekt.Models.Products.Product");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasDiscriminator().HasValue("Desktop");
 
                     b.HasData(
                         new
@@ -392,21 +458,7 @@ namespace MAS_projekt.Migrations
 
             modelBuilder.Entity("MAS_projekt.Models.Products.Laptop", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Brand")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasBaseType("MAS_projekt.Models.Products.Product");
 
                     b.Property<double>("DisplaySize")
                         .HasColumnType("float");
@@ -414,25 +466,11 @@ namespace MAS_projekt.Migrations
                     b.Property<int>("MaximumBatteryLife")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NumberOfItemsInStock")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Laptop");
+                    b.HasDiscriminator().HasValue("Laptop");
 
                     b.HasData(
                         new
@@ -441,13 +479,30 @@ namespace MAS_projekt.Migrations
                             Brand = "Alienware",
                             CategoryId = 3,
                             Description = "Laptoop Alienware Areea 51m",
-                            DisplaySize = 17.0,
-                            MaximumBatteryLife = 120,
                             Name = "AREA",
                             NumberOfItemsInStock = 15,
                             Price = 7999.9899999999998,
+                            DisplaySize = 17.0,
+                            MaximumBatteryLife = 120,
                             Type = "Gamingowy"
                         });
+                });
+
+            modelBuilder.Entity("MAS_projekt.Models.Products.Part", b =>
+                {
+                    b.HasBaseType("MAS_projekt.Models.Products.Product");
+
+                    b.Property<int?>("DesktopId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LaptopId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("DesktopId");
+
+                    b.HasIndex("LaptopId");
+
+                    b.HasDiscriminator().HasValue("Part");
                 });
 
             modelBuilder.Entity("MAS_projekt.Models.Orders.Item", b =>
@@ -455,6 +510,12 @@ namespace MAS_projekt.Migrations
                     b.HasOne("MAS_projekt.Models.Orders.Order", "Order")
                         .WithMany("Items")
                         .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MAS_projekt.Models.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -523,22 +584,24 @@ namespace MAS_projekt.Migrations
                         .HasForeignKey("SupercategoryId");
                 });
 
-            modelBuilder.Entity("MAS_projekt.Models.Products.Desktop", b =>
+            modelBuilder.Entity("MAS_projekt.Models.Products.Product", b =>
                 {
                     b.HasOne("MAS_projekt.Models.Products.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MAS_projekt.Models.Products.Laptop", b =>
+            modelBuilder.Entity("MAS_projekt.Models.Products.Part", b =>
                 {
-                    b.HasOne("MAS_projekt.Models.Products.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("MAS_projekt.Models.Products.Desktop", null)
+                        .WithMany("Parts")
+                        .HasForeignKey("DesktopId");
+
+                    b.HasOne("MAS_projekt.Models.Products.Laptop", null)
+                        .WithMany("Parts")
+                        .HasForeignKey("LaptopId");
                 });
 #pragma warning restore 612, 618
         }
