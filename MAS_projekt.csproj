@@ -183,10 +183,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DAL\DbService.cs" />
-    <Compile Include="Migrations\20200625033735_Migration1.0.cs" />
-    <Compile Include="Migrations\20200625033735_Migration1.0.designer.cs">
-      <DependentUpon>20200625033735_Migration1.0.cs</DependentUpon>
+    <Compile Include="DAL\OrderService.cs" />
+    <Compile Include="DAL\PersonService.cs" />
+    <Compile Include="Migrations\20200625073207_Migration1.0.cs" />
+    <Compile Include="Migrations\20200625073207_Migration1.0.designer.cs">
+      <DependentUpon>20200625073207_Migration1.0.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\MasDbContextModelSnapshot.cs" />
     <Compile Include="OrderDetailsWindow.xaml.cs">

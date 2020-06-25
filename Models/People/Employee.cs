@@ -34,7 +34,7 @@ namespace MAS_projekt.Models.People
 
         public Employee()
         {
-
+            this.DateOfEmployment = DateTime.Now;
         }
 
         public Employee(Person person, double salary)

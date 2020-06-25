@@ -24,7 +24,8 @@ namespace MAS_projekt
     /// </summary>
     public partial class OrderListWindow : Window
     {
-        private DbService _dbService;
+        private readonly OrderService _orderService;
+        private readonly PersonService _personService;
         private readonly ObservableCollection<Order> allOrders;
         private ObservableCollection<Order> filteredOrders;
         private readonly ObservableCollection<Client> allClients;
@@ -32,9 +33,10 @@ namespace MAS_projekt
         public OrderListWindow()
         {
             InitializeComponent();
-            _dbService = new DbService();
-            allOrders = _dbService.GetOrdersInProgressOrCreated();
-            allClients = _dbService.GetClients();
+            _orderService = new OrderService();
+            _personService = new PersonService();
+            allOrders = _orderService.GetOrdersInProgressOrCreated();
+            allClients = _personService.GetClients();
             filteredOrders = allOrders;
             OrderDataGrid.ItemsSource = filteredOrders;
             ClientComboBox.ItemsSource = allClients;
@@ -46,11 +48,11 @@ namespace MAS_projekt
             var text = textBox.Text.Trim();
             if (ClientComboBox.SelectedItem == null)
             {
-                filteredOrders = _dbService.GetOrdersFilteredByNumber(text);
+                filteredOrders = _orderService.GetOrdersInProgressOrCreatedFilteredByNumber(text);
             } else
             {
                 var client = (Client)ClientComboBox.SelectedItem;
-                filteredOrders = _dbService.GetOrdersOfClientFilteredByNumber(client, text);
+                filteredOrders = _orderService.GetOrdersOfClientFilteredByNumber(client, text);
             }
             OrderDataGrid.ItemsSource = null;
             OrderDataGrid.ItemsSource = filteredOrders;
@@ -61,7 +63,7 @@ namespace MAS_projekt
             var comboBox = (ComboBox)sender;
             var selectedClient = (Client)comboBox.SelectedItem;
             var text = FilterTextBox.Text.Trim();
-            filteredOrders = _dbService.GetOrdersOfClientFilteredByNumber(selectedClient, text);
+            filteredOrders = _orderService.GetOrdersOfClientFilteredByNumber(selectedClient, text);
             OrderDataGrid.ItemsSource = null;
             OrderDataGrid.ItemsSource = filteredOrders;
         }

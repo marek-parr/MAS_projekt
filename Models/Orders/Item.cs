@@ -14,10 +14,13 @@ namespace MAS_projekt.Models.Orders
         public int Id { get; set; }
         [Required]
         public int Amount { get; set; }
+        [Required]
         public virtual Product Product { get; set; }
         public int ProductId { get; set; }
         public Order Order { get; set; }
-        public int OrderId { get; set; }
+        public int? OrderId { get; set; }
+        public ShoppingCart ShoppingCart { get; set; }
+        public int? ShoppingCartId { get; set; }
         [NotMapped]
         public double Price
         {

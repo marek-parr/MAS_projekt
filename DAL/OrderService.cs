@@ -11,32 +11,15 @@ using MAS_projekt.Models.Products;
 
 namespace MAS_projekt.DAL
 {
-    public class DbService
+    public class OrderService
     {
-        private MasDbContext _context = new MasDbContext();
+        private readonly MasDbContext _context = new MasDbContext();
 
         public void UpdateDbContext()
         {
             _context.SaveChanges();
         }
 
-        public ObservableCollection<Client> GetClients()
-        {
-            return new ObservableCollection<Client>(_context.Clients.Include(x => x.Person).ToList());
-        }
-
-        public Client GetClientById(int id)
-        {
-            return _context.Clients.Include(x => x.Person).FirstOrDefault(x => x.Id == id);
-        }
-
-        public ObservableCollection<Client> GetClientsFiltered(string filter)
-        {
-            return new ObservableCollection<Client>(_context.Clients
-                .Where(client => client.ClientNumberAndFullName.ToUpper().Contains(filter.ToUpper()))
-                .Include(o => o.Person)
-                .ToList());
-        }
 
         public ObservableCollection<Order> GetOrdersInProgressOrCreated()
         {
@@ -88,6 +71,7 @@ namespace MAS_projekt.DAL
             {
                 throw new WrongOrderStateException(order, OrderState.IN_PROGRESS);
             }
+            order.CanceledOrRejected = DateTime.Now;
             ChangeOrderState(order, OrderState.REJECTED);
         }
 
@@ -98,6 +82,7 @@ namespace MAS_projekt.DAL
             {
                 throw new WrongOrderStateException(order, OrderState.CREATED);
             }
+            order.CanceledOrRejected = DateTime.Now;
             ChangeOrderState(order, OrderState.CANCELED);
         }
 
@@ -117,13 +102,14 @@ namespace MAS_projekt.DAL
             }
         }
 
-        public ObservableCollection<Order> GetOrdersFilteredByNumber(string orderNumber)
+        public ObservableCollection<Order> GetOrdersInProgressOrCreatedFilteredByNumber(string orderNumber)
         {
             return new ObservableCollection<Order>(_context.Orders
                 .Include(o => o.Client)
                     .ThenInclude(c => c.Person)
                 .Include(o => o.Items)
                     .ThenInclude(i => i.Product)
+                .Where(order => order.State.Equals(OrderState.CREATED) || order.State.Equals(OrderState.IN_PROGRESS))
                 .Where(order => order.OrderNumber.ToString().Contains(orderNumber))
                 .ToList());
         }

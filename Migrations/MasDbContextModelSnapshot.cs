@@ -29,7 +29,7 @@ namespace MAS_projekt.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
@@ -75,7 +75,7 @@ namespace MAS_projekt.Migrations
                             Id = 4,
                             Amount = 2,
                             OrderId = 3,
-                            ProductId = 2
+                            ProductId = 1
                         },
                         new
                         {
@@ -124,7 +124,7 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 1,
                             ClientId = 1L,
-                            Created = new DateTime(2020, 6, 15, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013),
+                            Created = new DateTime(2020, 6, 15, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455),
                             OrderNumber = 56789L,
                             State = 1
                         },
@@ -132,7 +132,7 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 2,
                             ClientId = 1L,
-                            Created = new DateTime(2020, 6, 22, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013),
+                            Created = new DateTime(2020, 6, 22, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455),
                             OrderNumber = 1234567L,
                             State = 0
                         },
@@ -140,7 +140,7 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 3,
                             ClientId = 2L,
-                            Created = new DateTime(2020, 6, 8, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013),
+                            Created = new DateTime(2020, 6, 8, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455),
                             OrderNumber = 78525345L,
                             State = 1
                         });
@@ -333,7 +333,7 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 1,
                             AddressId = 1,
-                            DateOfBirth = new DateTime(2000, 6, 25, 5, 37, 34, 804, DateTimeKind.Local).AddTicks(7890),
+                            DateOfBirth = new DateTime(2000, 6, 25, 9, 32, 6, 538, DateTimeKind.Local).AddTicks(7454),
                             Email = "test@test.com",
                             FirstName = "Jan",
                             LastName = "Kowalski",
@@ -343,7 +343,7 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 2,
                             AddressId = 2,
-                            DateOfBirth = new DateTime(2002, 6, 25, 5, 37, 34, 805, DateTimeKind.Local).AddTicks(7911),
+                            DateOfBirth = new DateTime(2002, 6, 25, 9, 32, 6, 540, DateTimeKind.Local).AddTicks(7457),
                             Email = "anna@nowak.com",
                             FirstName = "Anna",
                             LastName = "Nowak",
@@ -509,9 +509,7 @@ namespace MAS_projekt.Migrations
                 {
                     b.HasOne("MAS_projekt.Models.Orders.Order", "Order")
                         .WithMany("Items")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.HasOne("MAS_projekt.Models.Products.Product", "Product")
                         .WithMany()
@@ -519,7 +517,7 @@ namespace MAS_projekt.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MAS_projekt.Models.Orders.ShoppingCart", null)
+                    b.HasOne("MAS_projekt.Models.Orders.ShoppingCart", "ShoppingCart")
                         .WithMany("Items")
                         .HasForeignKey("ShoppingCartId");
                 });

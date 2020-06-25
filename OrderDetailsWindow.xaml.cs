@@ -21,14 +21,14 @@ namespace MAS_projekt
     /// </summary>
     public partial class OrderDetailsWindow : Window
     {
-        private readonly DbService _dbService;
+        private readonly OrderService _dbService;
         public string WindowTitle { get; }
         public Order Order { get; }
 
         public OrderDetailsWindow(Order order)
         {
             InitializeComponent();
-            _dbService = new DbService();
+            _dbService = new OrderService();
             this.Order = order;
             DataContext = this;
             WindowTitle = $"Zamówienie {order.OrderNumber}";

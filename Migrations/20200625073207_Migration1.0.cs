@@ -229,7 +229,7 @@ namespace MAS_projekt.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Amount = table.Column<int>(nullable: false),
                     ProductId = table.Column<int>(nullable: false),
-                    OrderId = table.Column<int>(nullable: false),
+                    OrderId = table.Column<int>(nullable: true),
                     ShoppingCartId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -240,7 +240,7 @@ namespace MAS_projekt.Migrations
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Items_Products_ProductId",
                         column: x => x.ProductId,
@@ -284,8 +284,8 @@ namespace MAS_projekt.Migrations
                 columns: new[] { "Id", "AddressId", "DateOfBirth", "Email", "FirstName", "LastName", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2000, 6, 25, 5, 37, 34, 804, DateTimeKind.Local).AddTicks(7890), "test@test.com", "Jan", "Kowalski", "1234567890" },
-                    { 2, 2, new DateTime(2002, 6, 25, 5, 37, 34, 805, DateTimeKind.Local).AddTicks(7911), "anna@nowak.com", "Anna", "Nowak", "675849321" }
+                    { 1, 1, new DateTime(2000, 6, 25, 9, 32, 6, 538, DateTimeKind.Local).AddTicks(7454), "test@test.com", "Jan", "Kowalski", "1234567890" },
+                    { 2, 2, new DateTime(2002, 6, 25, 9, 32, 6, 540, DateTimeKind.Local).AddTicks(7457), "anna@nowak.com", "Anna", "Nowak", "675849321" }
                 });
 
             migrationBuilder.InsertData(
@@ -310,17 +310,17 @@ namespace MAS_projekt.Migrations
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CanceledOrRejected", "ClientId", "Created", "OrderNumber", "ReportId", "State" },
-                values: new object[] { 1, null, 1L, new DateTime(2020, 6, 15, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013), 56789L, null, 1 });
+                values: new object[] { 1, null, 1L, new DateTime(2020, 6, 15, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455), 56789L, null, 1 });
 
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CanceledOrRejected", "ClientId", "Created", "OrderNumber", "ReportId", "State" },
-                values: new object[] { 2, null, 1L, new DateTime(2020, 6, 22, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013), 1234567L, null, 0 });
+                values: new object[] { 2, null, 1L, new DateTime(2020, 6, 22, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455), 1234567L, null, 0 });
 
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CanceledOrRejected", "ClientId", "Created", "OrderNumber", "ReportId", "State" },
-                values: new object[] { 3, null, 2L, new DateTime(2020, 6, 8, 5, 37, 34, 849, DateTimeKind.Local).AddTicks(8013), 78525345L, null, 1 });
+                values: new object[] { 3, null, 2L, new DateTime(2020, 6, 8, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455), 78525345L, null, 1 });
 
             migrationBuilder.InsertData(
                 table: "Items",
@@ -330,7 +330,7 @@ namespace MAS_projekt.Migrations
                     { 1, 3, 1, 2, null },
                     { 2, 1, 1, 1, null },
                     { 3, 3, 2, 1, null },
-                    { 4, 2, 3, 2, null },
+                    { 4, 2, 3, 1, null },
                     { 5, 1, 3, 2, null }
                 });
 

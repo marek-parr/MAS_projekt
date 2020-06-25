@@ -165,8 +165,6 @@ namespace MAS_projekt
                 OrderNumber = 56789L,
                 State = OrderState.IN_PROGRESS
             };
-
-
             var order2 = new 
             {
                 Id = 2,
@@ -175,7 +173,6 @@ namespace MAS_projekt
                 OrderNumber = 1234567L,
                 State = OrderState.CREATED
             };
-
             var order3 = new
             {
                 Id = 3,
@@ -184,8 +181,6 @@ namespace MAS_projekt
                 OrderNumber = 78525345L,
                 State = OrderState.IN_PROGRESS
             };
-
-
             modelBuilder.Entity<Order>().HasData(order1, order2, order3);
         }
 

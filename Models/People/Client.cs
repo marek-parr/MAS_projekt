@@ -38,6 +38,7 @@ namespace MAS_projekt.Models.People
         public Client(Person person)
         {
             this.Person = person;
+            this.PersonId = person.Id;
             this.PreferredAddress = this.Person.Address;
             this.ShoppingCart = new ShoppingCart
             {
