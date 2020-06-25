@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MAS_projekt.Models.Products
 {
-    public class Monitor: Product
+    public class Monitor : Product
     {
         public double DisplaySize { get; set; }
     }

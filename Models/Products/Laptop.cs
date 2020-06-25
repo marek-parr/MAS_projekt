@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MAS_projekt.Models.Products
 {
-    public class Laptop: Computer
+    public class Laptop : Computer
     {
         public int MaximumBatteryLife { get; set; }
         public double DisplaySize { get; set; }

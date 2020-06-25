@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace MAS_projekt.Models.Products
 {
-    public class Dekstop: Computer
+    public class Desktop : Computer
     {
+
     }
 }
