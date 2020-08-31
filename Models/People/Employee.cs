@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MAS_projekt.Models.People
 {
@@ -42,6 +38,14 @@ namespace MAS_projekt.Models.People
             this.Person = person;
             this.Salary = salary;
             this.DateOfEmployment = DateTime.Now;
+            this.IsActive = true;
+        }
+
+        public Employee(Person person, double salary, DateTime dateOfEmployment)
+        {
+            this.Person = person;
+            this.Salary = salary;
+            this.DateOfEmployment = dateOfEmployment;
             this.IsActive = true;
         }
     }

@@ -43,9 +43,10 @@
                 <DataGridTextColumn Header="Zamówienie nr" Width="*" Binding="{Binding OrderNumber}" />
                 <DataGridTextColumn Header="Data złożenia" Width="*" Binding="{Binding Created}" />
                 <DataGridTextColumn Header="Klient" Width="2*" Binding="{Binding Client.ClientNumberAndFullName}" />
+                <DataGridTextColumn Header="Stan" Width="*" Binding="{Binding State}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="NextButton" Grid.Column="3" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Height="50" Click="NextButton_Click" Margin="0 30 0 0 " >Dalej</Button>
+        <Button x:Name="NextButton" Grid.Column="3" Grid.Row="4" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Height="50" Click="NextButton_Click" Margin="0 30 0 0" IsEnabled="{Binding CanProceedSelectedOrder}" >Dalej</Button>
         
     </Grid>
 </Window>

@@ -15,12 +15,19 @@ namespace MAS_projekt.DAL
 
         public ObservableCollection<Client> GetClients()
         {
-            return new ObservableCollection<Client>(_context.Clients.Include(x => x.Person).ToList());
+            return new ObservableCollection<Client>(
+                _context.Clients
+                .Include(x => x.Person)
+                .Include(x => x.Orders)
+                    .ThenInclude(o => o.Items)
+                        .ThenInclude(i => i.Product)
+                .ToList());
         }
 
         public void AddClient(int personId)
         {
-            var person = _context.People
+            var person = 
+                _context.People
                 .Include(p => p.Client)
                 .FirstOrDefault(p => p.Id == personId);
             if (person.Client == null)
@@ -31,7 +38,8 @@ namespace MAS_projekt.DAL
 
         public void AddEmployee(int personId, double salary)
         {
-            var person = _context.People
+            var person = 
+                _context.People
                 .Include(p => p.Employee)
                 .FirstOrDefault(p => p.Id == personId);
             if (person.Employee == null)

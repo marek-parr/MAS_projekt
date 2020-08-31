@@ -1,13 +1,9 @@
 ﻿using MAS_projekt.Models.Orders;
 using MAS_projekt.Models.People;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.ObjectModel;
-using MAS_projekt.Models.Products;
+using System.Linq;
 
 namespace MAS_projekt.DAL
 {
@@ -18,6 +14,16 @@ namespace MAS_projekt.DAL
         public void UpdateDbContext()
         {
             _context.SaveChanges();
+        }
+
+        public ObservableCollection<Order> GetOrders()
+        {
+            return new ObservableCollection<Order>(_context.Orders
+                .Include(order => order.Client)
+                    .ThenInclude(c => c.Person)
+                .Include(order => order.Items)
+                    .ThenInclude(item => item.Product)
+                .ToList());
         }
 
 
@@ -36,16 +42,9 @@ namespace MAS_projekt.DAL
         {
             if (client == null)
             {
-                return GetOrdersInProgressOrCreated();
+                return GetOrders();
             }
-            return new ObservableCollection<Order>(_context.Orders
-                .Where(order => order.State.Equals(OrderState.CREATED) || order.State.Equals(OrderState.IN_PROGRESS))
-                .Where(order => order.Client.Equals(client))
-                .Include(o => o.Client)
-                    .ThenInclude(c => c.Person)
-                .Include(o => o.Items)
-                    .ThenInclude(i => i.Product)
-                .ToList());
+            return new ObservableCollection<Order>(client.Orders);
         }
 
         public Order GetOrderById(int id)
@@ -102,14 +101,13 @@ namespace MAS_projekt.DAL
             }
         }
 
-        public ObservableCollection<Order> GetOrdersInProgressOrCreatedFilteredByNumber(string orderNumber)
+        public ObservableCollection<Order> GetOrdersFilteredByNumber(string orderNumber)
         {
             return new ObservableCollection<Order>(_context.Orders
                 .Include(o => o.Client)
                     .ThenInclude(c => c.Person)
                 .Include(o => o.Items)
                     .ThenInclude(i => i.Product)
-                .Where(order => order.State.Equals(OrderState.CREATED) || order.State.Equals(OrderState.IN_PROGRESS))
                 .Where(order => order.OrderNumber.ToString().Contains(orderNumber))
                 .ToList());
         }

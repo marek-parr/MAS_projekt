@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MAS_projekt.Migrations
 {
     [DbContext(typeof(MasDbContext))]
-    [Migration("20200625073207_Migration1.0")]
+    [Migration("20200831181003_Migration1.0")]
     partial class Migration10
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,6 +85,13 @@ namespace MAS_projekt.Migrations
                             Amount = 1,
                             OrderId = 3,
                             ProductId = 2
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Amount = 7,
+                            OrderId = 4,
+                            ProductId = 1
                         });
                 });
 
@@ -126,7 +133,7 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 1,
                             ClientId = 1L,
-                            Created = new DateTime(2020, 6, 15, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455),
+                            Created = new DateTime(2020, 8, 21, 20, 10, 2, 708, DateTimeKind.Local).AddTicks(8936),
                             OrderNumber = 56789L,
                             State = 1
                         },
@@ -134,7 +141,7 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 2,
                             ClientId = 1L,
-                            Created = new DateTime(2020, 6, 22, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455),
+                            Created = new DateTime(2020, 8, 28, 20, 10, 2, 708, DateTimeKind.Local).AddTicks(8936),
                             OrderNumber = 1234567L,
                             State = 0
                         },
@@ -142,9 +149,17 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 3,
                             ClientId = 2L,
-                            Created = new DateTime(2020, 6, 8, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455),
+                            Created = new DateTime(2020, 8, 14, 20, 10, 2, 708, DateTimeKind.Local).AddTicks(8936),
                             OrderNumber = 78525345L,
                             State = 1
+                        },
+                        new
+                        {
+                            Id = 4,
+                            ClientId = 3L,
+                            Created = new DateTime(2020, 8, 27, 20, 10, 2, 708, DateTimeKind.Local).AddTicks(8936),
+                            OrderNumber = 77777777L,
+                            State = 0
                         });
                 });
 
@@ -227,6 +242,14 @@ namespace MAS_projekt.Migrations
                             HouseNumber = "44",
                             PostalCode = "00-001",
                             Street = "Złota"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            City = "Warszawa",
+                            HouseNumber = "123",
+                            PostalCode = "00-001",
+                            Street = "Grochowska"
                         });
                 });
 
@@ -262,6 +285,11 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 2L,
                             PersonId = 2
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            PersonId = 3
                         });
                 });
 
@@ -293,6 +321,17 @@ namespace MAS_projekt.Migrations
                         .IsUnique();
 
                     b.ToTable("Employees");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DateOfDismissal = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateOfEmployment = new DateTime(2020, 8, 31, 20, 10, 2, 666, DateTimeKind.Local).AddTicks(8849),
+                            IsActive = true,
+                            PersonId = 3,
+                            Salary = 3500.0
+                        });
                 });
 
             modelBuilder.Entity("MAS_projekt.Models.People.Person", b =>
@@ -335,7 +374,7 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 1,
                             AddressId = 1,
-                            DateOfBirth = new DateTime(2000, 6, 25, 9, 32, 6, 538, DateTimeKind.Local).AddTicks(7454),
+                            DateOfBirth = new DateTime(2000, 8, 31, 20, 10, 2, 664, DateTimeKind.Local).AddTicks(8937),
                             Email = "test@test.com",
                             FirstName = "Jan",
                             LastName = "Kowalski",
@@ -345,11 +384,21 @@ namespace MAS_projekt.Migrations
                         {
                             Id = 2,
                             AddressId = 2,
-                            DateOfBirth = new DateTime(2002, 6, 25, 9, 32, 6, 540, DateTimeKind.Local).AddTicks(7457),
+                            DateOfBirth = new DateTime(2002, 8, 31, 20, 10, 2, 666, DateTimeKind.Local).AddTicks(8849),
                             Email = "anna@nowak.com",
                             FirstName = "Anna",
                             LastName = "Nowak",
                             PhoneNumber = "675849321"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            AddressId = 3,
+                            DateOfBirth = new DateTime(1985, 8, 31, 20, 10, 2, 666, DateTimeKind.Local).AddTicks(8849),
+                            Email = "robert@polak.pl",
+                            FirstName = "Robert",
+                            LastName = "Polak",
+                            PhoneNumber = "678379321"
                         });
                 });
 

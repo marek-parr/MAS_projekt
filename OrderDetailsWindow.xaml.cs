@@ -36,6 +36,10 @@ namespace MAS_projekt
             if (!order.State.Equals(OrderState.IN_PROGRESS)) {
                 RejectButton.Visibility = Visibility.Hidden;
             }
+            if (!order.State.Equals(OrderState.CREATED) && !order.State.Equals(OrderState.IN_PROGRESS))
+            {
+                NextButton.Visibility = Visibility.Hidden;
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -45,6 +49,16 @@ namespace MAS_projekt
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Order.State == OrderState.DONE)
+            {
+                MessageBox.Show("Zamówienie jest zrealizowane, nie da się przejść do następnego etapu.");
+                return;
+            }
+            if (Order.State == OrderState.CANCELED)
+            {
+                MessageBox.Show("Zamówienie zostało odrzucone, nie da się przejść do następnego etapu.");
+                return;
+            }
             var nextState = Order.State + 1;
             var result = MessageBox.Show($"Czy na pewno chcesz przejść do następnego etapu w zamówieniu {Order.OrderNumber}?\n" +
                 $"Spowoduje to zmianę statusu z \"{Order.StateString}\" na \"{nextState.GetOrderStateDisplayName()}\".", "Przejdź do następnego etapu", MessageBoxButton.YesNo);

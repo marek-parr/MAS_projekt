@@ -36,7 +36,15 @@ namespace MAS_projekt
                 City = "Warszawa",
                 PostalCode = "00-001"
             };
-            modelBuilder.Entity<Address>().HasData(address1, address2);
+            var address3 = new Address
+            {
+                Id = 3,
+                Street = "Grochowska",
+                HouseNumber = "123",
+                City = "Warszawa",
+                PostalCode = "00-001"
+            };
+            modelBuilder.Entity<Address>().HasData(address1, address2, address3);
 
             var person1 =
                 new Person
@@ -60,7 +68,18 @@ namespace MAS_projekt
                     AddressId = 2,
                     Id = 2
                 };
-            modelBuilder.Entity<Person>().HasData(person1, person2);
+            var person3 =
+               new Person
+               {
+                   FirstName = "Robert",
+                   LastName = "Polak",
+                   DateOfBirth = DateTime.Now.AddYears(-35),
+                   PhoneNumber = "678379321",
+                   Email = "robert@polak.pl",
+                   AddressId = 3,
+                   Id = 3
+               };
+            modelBuilder.Entity<Person>().HasData(person1, person2, person3);
 
             var client1 = new Client
             {
@@ -72,7 +91,22 @@ namespace MAS_projekt
                 Id = 2L,
                 PersonId = 2
             };
-            modelBuilder.Entity<Client>().HasData(client1, client2);
+            var client3 = new Client
+            {
+                Id = 3L,
+                PersonId = 3
+            };
+            modelBuilder.Entity<Client>().HasData(client1, client2, client3);
+
+            var emp1 = new Employee
+            {
+                Id = 1,
+                PersonId = 3,
+                Salary = 3500,
+                DateOfEmployment = DateTime.Now,
+                IsActive = true
+            };
+            modelBuilder.Entity<Employee>().HasData(emp1);
 
             var category1 = new Category
             {
@@ -155,7 +189,14 @@ namespace MAS_projekt
                 Amount = 1,
                 OrderId = 3
             };
-            modelBuilder.Entity<Item>().HasData(item1, item2, item3, item4, item5);
+            var item6 = new Item()
+            {
+                Id = 6,
+                ProductId = 1,
+                Amount = 7,
+                OrderId = 4
+            };
+            modelBuilder.Entity<Item>().HasData(item1, item2, item3, item4, item5, item6);
 
             var order1 = new 
             {
@@ -181,7 +222,15 @@ namespace MAS_projekt
                 OrderNumber = 78525345L,
                 State = OrderState.IN_PROGRESS
             };
-            modelBuilder.Entity<Order>().HasData(order1, order2, order3);
+            var order4 = new
+            {
+                Id = 4,
+                ClientId = 3L,
+                Created = DateTime.Now.AddDays(-4),
+                OrderNumber = 77777777L,
+                State = OrderState.CREATED
+            };
+            modelBuilder.Entity<Order>().HasData(order1, order2, order3, order4);
         }
 
         public virtual DbSet<Employee> Employees { get; set; }

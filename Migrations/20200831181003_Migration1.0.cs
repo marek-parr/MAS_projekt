@@ -258,12 +258,12 @@ namespace MAS_projekt.Migrations
             migrationBuilder.InsertData(
                 table: "Addresses",
                 columns: new[] { "Id", "ApartmentNumber", "City", "HouseNumber", "PostalCode", "Street" },
-                values: new object[] { 1, null, "Warszawa", "1A", "00-001", "Marszałkowska" });
-
-            migrationBuilder.InsertData(
-                table: "Addresses",
-                columns: new[] { "Id", "ApartmentNumber", "City", "HouseNumber", "PostalCode", "Street" },
-                values: new object[] { 2, null, "Warszawa", "44", "00-001", "Złota" });
+                values: new object[,]
+                {
+                    { 1, null, "Warszawa", "1A", "00-001", "Marszałkowska" },
+                    { 2, null, "Warszawa", "44", "00-001", "Złota" },
+                    { 3, null, "Warszawa", "123", "00-001", "Grochowska" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Categories",
@@ -284,8 +284,9 @@ namespace MAS_projekt.Migrations
                 columns: new[] { "Id", "AddressId", "DateOfBirth", "Email", "FirstName", "LastName", "PhoneNumber" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2000, 6, 25, 9, 32, 6, 538, DateTimeKind.Local).AddTicks(7454), "test@test.com", "Jan", "Kowalski", "1234567890" },
-                    { 2, 2, new DateTime(2002, 6, 25, 9, 32, 6, 540, DateTimeKind.Local).AddTicks(7457), "anna@nowak.com", "Anna", "Nowak", "675849321" }
+                    { 1, 1, new DateTime(2000, 8, 31, 20, 10, 2, 664, DateTimeKind.Local).AddTicks(8937), "test@test.com", "Jan", "Kowalski", "1234567890" },
+                    { 2, 2, new DateTime(2002, 8, 31, 20, 10, 2, 666, DateTimeKind.Local).AddTicks(8849), "anna@nowak.com", "Anna", "Nowak", "675849321" },
+                    { 3, 3, new DateTime(1985, 8, 31, 20, 10, 2, 666, DateTimeKind.Local).AddTicks(8849), "robert@polak.pl", "Robert", "Polak", "678379321" }
                 });
 
             migrationBuilder.InsertData(
@@ -294,8 +295,14 @@ namespace MAS_projekt.Migrations
                 values: new object[,]
                 {
                     { 1L, 1, null },
-                    { 2L, 2, null }
+                    { 2L, 2, null },
+                    { 3L, 3, null }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "DateOfDismissal", "DateOfEmployment", "IsActive", "PersonId", "Salary" },
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2020, 8, 31, 20, 10, 2, 666, DateTimeKind.Local).AddTicks(8849), true, 3, 3500.0 });
 
             migrationBuilder.InsertData(
                 table: "Products",
@@ -310,17 +317,13 @@ namespace MAS_projekt.Migrations
             migrationBuilder.InsertData(
                 table: "Orders",
                 columns: new[] { "Id", "CanceledOrRejected", "ClientId", "Created", "OrderNumber", "ReportId", "State" },
-                values: new object[] { 1, null, 1L, new DateTime(2020, 6, 15, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455), 56789L, null, 1 });
-
-            migrationBuilder.InsertData(
-                table: "Orders",
-                columns: new[] { "Id", "CanceledOrRejected", "ClientId", "Created", "OrderNumber", "ReportId", "State" },
-                values: new object[] { 2, null, 1L, new DateTime(2020, 6, 22, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455), 1234567L, null, 0 });
-
-            migrationBuilder.InsertData(
-                table: "Orders",
-                columns: new[] { "Id", "CanceledOrRejected", "ClientId", "Created", "OrderNumber", "ReportId", "State" },
-                values: new object[] { 3, null, 2L, new DateTime(2020, 6, 8, 9, 32, 6, 583, DateTimeKind.Local).AddTicks(7455), 78525345L, null, 1 });
+                values: new object[,]
+                {
+                    { 1, null, 1L, new DateTime(2020, 8, 21, 20, 10, 2, 708, DateTimeKind.Local).AddTicks(8936), 56789L, null, 1 },
+                    { 2, null, 1L, new DateTime(2020, 8, 28, 20, 10, 2, 708, DateTimeKind.Local).AddTicks(8936), 1234567L, null, 0 },
+                    { 3, null, 2L, new DateTime(2020, 8, 14, 20, 10, 2, 708, DateTimeKind.Local).AddTicks(8936), 78525345L, null, 1 },
+                    { 4, null, 3L, new DateTime(2020, 8, 27, 20, 10, 2, 708, DateTimeKind.Local).AddTicks(8936), 77777777L, null, 0 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Items",
@@ -331,7 +334,8 @@ namespace MAS_projekt.Migrations
                     { 2, 1, 1, 1, null },
                     { 3, 3, 2, 1, null },
                     { 4, 2, 3, 1, null },
-                    { 5, 1, 3, 2, null }
+                    { 5, 1, 3, 2, null },
+                    { 6, 7, 4, 1, null }
                 });
 
             migrationBuilder.CreateIndex(

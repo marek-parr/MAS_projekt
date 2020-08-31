@@ -29,13 +29,21 @@ namespace MAS_projekt
         private readonly ObservableCollection<Order> allOrders;
         private ObservableCollection<Order> filteredOrders;
         private readonly ObservableCollection<Client> allClients;
+        public bool CanProceedSelectedOrder
+        {
+            get
+            {
+                var selectedOrder = (Order)OrderDataGrid.SelectedItem;
+                return selectedOrder != null && (selectedOrder.State.Equals(OrderState.CREATED) || selectedOrder.State.Equals(OrderState.IN_PROGRESS));
+            }
+        }
 
         public OrderListWindow()
         {
             InitializeComponent();
             _orderService = new OrderService();
             _personService = new PersonService();
-            allOrders = _orderService.GetOrdersInProgressOrCreated();
+            allOrders = _orderService.GetOrders();
             allClients = _personService.GetClients();
             filteredOrders = allOrders;
             OrderDataGrid.ItemsSource = filteredOrders;
@@ -48,7 +56,7 @@ namespace MAS_projekt
             var text = textBox.Text.Trim();
             if (ClientComboBox.SelectedItem == null)
             {
-                filteredOrders = _orderService.GetOrdersInProgressOrCreatedFilteredByNumber(text);
+                filteredOrders = _orderService.GetOrdersFilteredByNumber(text);
             } else
             {
                 var client = (Client)ClientComboBox.SelectedItem;
