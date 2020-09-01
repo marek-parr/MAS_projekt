@@ -25,7 +25,7 @@ namespace MAS_projekt.Models.People
         public Address Address { get; set; }
         public int AddressId { get; set; }
         public virtual Client Client { get; set; }
-        public Employee Employee { get; set; }
+        public virtual Employee Employee { get; set; }
 
         public string GetFullName()
         {
